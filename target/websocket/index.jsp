@@ -2,78 +2,61 @@
  
 <html>
     <head>
-        <title>Chat Broadcast - Ejemplo de Websocket</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-    </head>
+		<title>TP1-Front/End</title>
+		<link rel="stylesheet" type="text/css" href="stylo.css">
+	</head>
     <body>
        
-        <div>
+        <div class="container-center">
+			<h1>TA-TE-TI GAME!</h1>
+		</div>
+
+		<div id="general">
+			<div class="casilla" onClick="myFunction('0')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('1')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('2')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('3')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('4')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('5')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('6')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('7')">
+				<p class="letter"></p>
+			</div>
+			<div class="casilla" onClick="myFunction('8')">
+				<p class="letter"></p>
+			</div>
+		</div>
+
+		<div class="container-center">
+   			<button type="button" onclick="openSocket();" >Jugar!</button>
+			<h5>Turno del Player:</h5>
+			<h3 id="turno">1</h3>
+			<h2 id="again" onClick="location.reload();"></h2>
+		</div>
+		
+		<div>
             <input type="text" id="messageinput"/>
         </div>
         <div>
-            <button type="button" onclick="openSocket();" >Open</button>
-            <button type="button" onclick="send();" >Send</button>
-            <button type="button" onclick="closeSocket();" >Close</button>
+            <button type="button" onclick="closeSocket();" >Ya no quiero jugar porque soy cagon</button>
         </div>
         <!-- Server responses get written here -->
         <div id="messages"></div>
-       
-        <!-- Script to utilise the WebSocket -->
-        <script type="text/javascript">
-                       
-            var webSocket;
-            var messages = document.getElementById("messages");
-           
-           
-            function openSocket(){
-                // Ensures only one connection is open at a time
-                if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
-                   writeResponse("WebSocket is already opened.");
-                    return;
-                }
-                // Create a new instance of the websocket
-                webSocket = new WebSocket("ws://localhost:8080/websocket/chatserver");
-                 
-                /**
-                 * Binds functions to the listeners for the websocket.
-                 */
-                webSocket.onopen = function(event){
-                    // For reasons I can't determine, onopen gets called twice
-                    // and the first time event.data is undefined.
-                    // Leave a comment if you know the answer.
-                    if(event.data === undefined)
-                        return;
- 
-                    writeResponse(event.data);
-                };
- 
-                webSocket.onmessage = function(event){
-                    writeResponse(event.data);
-                };
- 
-                webSocket.onclose = function(event){
-                    writeResponse("Connection closed");
-                };
-            }
-           
-            /**
-             * Sends the value of the text input to the server
-             */
-            function send(){
-                var text = document.getElementById("messageinput").value;
-                webSocket.send(text);
-            }
-           
-            function closeSocket(){
-                webSocket.close();
-            }
- 
-            function writeResponse(text){
-                messages.innerHTML += "<br/>" + text;
-            }
-           
-        </script>
-       
+        <script type="text/javascript" src="script.js"></script>
+        
     </body>
 </html>

@@ -1,0 +1,27 @@
+#general {
+	margin:auto;
+	width: 306px;
+	height: 306px;
+	background-color: black;
+}
+
+.casilla {
+	float:left;
+	margin: 1px;
+	width: 100px;
+	height: 100px;
+	background-color: #ADD8E6;
+	text-align: center;
+}
+
+.letter {
+	font: bold 200% Arial;
+	font-size: 80px;
+	margin: 1px;
+}
+
+.container-center {
+	text-align: center;
+	font: Helvetica;
+	font-style: italic;
+}

@@ -5,7 +5,7 @@ var count = 0;
 
 var webSocket;
 var messages = document.getElementById("messages");
-var tu_turno = true;
+
 //PARTE WEBSOCKET
 function openSocket(){
     // Ensures only one connection is open at a time
@@ -32,25 +32,11 @@ function openSocket(){
     webSocket.onmessage = function(event){
         writeResponse(event.data);
         var elements = document.getElementsByClassName("letter");
-        if (finJuego===false && jugador==1){
+        if (finJuego===false){
 	    	elements[parseInt(event.data)].innerHTML = 'X';
 	    	marcado[parseInt(event.data)] = 1;
-	    	jugador = 2;
-	    	turnoJugador(2);
-	    	comprobarGanador();
-	    	tu_turno=true;
-
-	    } else if (finJuego==false && jugador ==2){
-	    	elements[parseInt(event.data)].innerHTML = 'O';
-	    	marcado[parseInt(event.data)] = 2;
-	    	jugador = 1;
-	    	turnoJugador(1);
-	    	comprobarGanador();	    	
-	    	tu_turno=true;
-
-	    }
+	    	comprobarGanador();}
     };
-    
 
     webSocket.onclose = function(event){
         writeResponse("Connection closed");
@@ -75,7 +61,6 @@ function writeResponse(text){
 function myFunction(valor) {
     var elements = document.getElementsByClassName("letter");
     var j;
-    if (tu_turno===true){
 	for (var i = 0; i < elements.length; i++) {
 	    if (valor==i.toString() && jugador==1 && marcado[i]===0 && finJuego===false){
 	    	elements[i].innerHTML = 'X';
@@ -84,7 +69,7 @@ function myFunction(valor) {
 	    	marcado[i] = 1;
 	    	webSocket.send(i);
 	    	comprobarGanador();
-	    	tu_turno=false;
+	    		    	
 	    }
 	  	else if (valor==i.toString() && jugador==2 && marcado[i]===0 && finJuego===false){
 	  		elements[i].innerHTML = 'O';
@@ -93,22 +78,15 @@ function myFunction(valor) {
 	  		marcado[i] = 2;
 	  		webSocket.send(i);
 	  		comprobarGanador();
-	    	tu_turno=false;
+	  		
 	  	}
 	}
 	if (finJuego===false){
 		comprobarGanador();	
 	}
-    } else {
-    	alert("No es tu turno!");
-    }
 }
 
 //PARTE TA-TE-TI
-function turnoJugador(valor){
-	document.getElementById("turno").innerHTML = valor;
-}
-
 function comprobarGanador() {
 	if (marcado[0]==marcado[1] && marcado[1]==marcado[2] && marcado[0]!==0){
 		if (marcado[0]==1){
@@ -173,7 +151,6 @@ function comprobarGanador() {
 			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
-		tu_turno=true;
 	}else{
 			
 		for (var j=0;j<9; j++)
