@@ -4,8 +4,20 @@ var finJuego = false;
 var count = 0;
 
 var webSocket;
-var messages = document.getElementById("messages");
+var menu = document.getElementById("menu");
 var tu_turno = true;
+
+function mostrarcasilla(){
+    
+    if (document.getElementById("juego").style.display=="none"){
+        document.getElementById("juego").style.display="inline";
+        document.getElementById("menu").style.display="none";
+    } else {
+        document.getElementById("juego").style.display="none";
+        document.getElementById("menu").style.display="inline";
+    }
+}
+
 //PARTE WEBSOCKET
 function openSocket(){
     // Ensures only one connection is open at a time
@@ -31,24 +43,30 @@ function openSocket(){
 
     webSocket.onmessage = function(event){
         writeResponse(event.data);
-        var elements = document.getElementsByClassName("letter");
-        if (finJuego===false && jugador==1){
-	    	elements[parseInt(event.data)].innerHTML = 'X';
-	    	marcado[parseInt(event.data)] = 1;
-	    	jugador = 2;
-	    	turnoJugador(2);
-	    	comprobarGanador();
-	    	tu_turno=true;
-
-	    } else if (finJuego==false && jugador ==2){
-	    	elements[parseInt(event.data)].innerHTML = 'O';
-	    	marcado[parseInt(event.data)] = 2;
-	    	jugador = 1;
-	    	turnoJugador(1);
-	    	comprobarGanador();	    	
-	    	tu_turno=true;
-
-	    }
+        var array = event.data.split(":")
+        if (array[0]==="jugada"){
+        	var elements = document.getElementsByClassName("letter");
+	        if (finJuego===false && jugador==1){
+		    	elements[parseInt(array[1])].innerHTML = 'X';
+		    	marcado[parseInt(array[1])] = 1;
+		    	jugador = 2;
+		    	turnoJugador(2);
+		    	comprobarGanador();
+		    	tu_turno=true;
+	
+		    } else if (finJuego==false && jugador ==2){
+		    	elements[parseInt(array[1])].innerHTML = 'O';
+		    	marcado[parseInt(array[1])] = 2;
+		    	jugador = 1;
+		    	turnoJugador(1);
+		    	comprobarGanador();	    	
+		    	tu_turno=true;
+	
+		    }
+        }else if (array[0]==="abierto"){
+        	
+        }
+ 		
     };
     
 
@@ -69,7 +87,7 @@ function closeSocket(){
 }
 
 function writeResponse(text){
-    messages.innerHTML += "<br/>" + text;
+    menu.innerHTML += "<br/>" + text;
 }
 
 function myFunction(valor) {
@@ -82,7 +100,7 @@ function myFunction(valor) {
 	    	jugador=2;
 	    	document.getElementById("turno").innerHTML = jugador;
 	    	marcado[i] = 1;
-	    	webSocket.send(i);
+	    	webSocket.send("jugada:"+i);
 	    	comprobarGanador();
 	    	tu_turno=false;
 	    }
@@ -91,7 +109,7 @@ function myFunction(valor) {
 	  		jugador = 1;
 	  		document.getElementById("turno").innerHTML = jugador;
 	  		marcado[i] = 2;
-	  		webSocket.send(i);
+	  		webSocket.send("jugada:"+i);
 	  		comprobarGanador();
 	    	tu_turno=false;
 	  	}
