@@ -245,8 +245,18 @@ function comprobarGanador() {
 			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
-	}else{
-			
+
+	} else if (marcado[2]==marcado[4] && marcado[4]==marcado[6] && marcado[2]!==0){
+		if (marcado[2]==1){
+			alert("El ganador es el Player: 1");
+			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
+		} else if (marcado[2]==2){
+			alert("El ganador es el Player: 2");
+			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
+		}
+		finJuego = true;
+	}else {			
+		
 		for (var j=0;j<9; j++)
 		{
 			if (marcado[j]!==0){
