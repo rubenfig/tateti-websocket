@@ -1,6 +1,7 @@
 package py.pol.una.websocket;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 public class ChatService {
 	
 	private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
+	private static ArrayList<Session>  jugando = new ArrayList<Session> ();
 	
 	@OnOpen
     public void onOpen(Session session){
@@ -26,7 +28,9 @@ public class ChatService {
                 if (!peer.equals(session)) {
                 	System.out.println("Enviando abierto:"+session.getId()+" a " + peer.getId());
                     peer.getBasicRemote().sendText("abierto:"+session.getId());
-                    session.getBasicRemote().sendText("abierto:"+peer.getId());
+                    if (!jugando.contains(peer)){
+                    	session.getBasicRemote().sendText("abierto:"+peer.getId());
+                    }
                 }
             }
         } catch (IOException ex) {
@@ -43,6 +47,8 @@ public class ChatService {
                 p.getBasicRemote().sendText("cerrado:"+peer.getId());
             }
         }
+		if(jugando.contains(peer)){
+			jugando.remove(peer);}
         peers.remove(peer);
     }
 	
@@ -72,7 +78,15 @@ public class ChatService {
 		                peer.getBasicRemote().sendText("jugada:"+partes[1]+":"+session.getId());
 		            }
 		        }
-		 }else {
+		 }else if (partes[0].equals("jugando")){
+			 jugando.add(session);
+			 for (Session peer : peers) {
+		            if (!peer.equals(session)) {
+		            	System.out.println("Enviando mensaje a " + peer.getId());
+		            	peer.getBasicRemote().sendText("jugando:"+session.getId());
+		            }
+		        }
+		 }else{
 			 
 			 System.out.println("broadcast message: " + mensaje + ". Peers #: " + peers.size());
 	        

@@ -47,13 +47,12 @@
 				<br><br>
 				<h5>Turno del Player:</h5>
 				<h3 id="turno">1</h3>
-				<h2 id="again" onClick="location.reload();"></h2>
 			</div>
 			
 	        <div class="container-center">
 	        	<br><br>
 	        	<br><br>    
-	            <button type="button" onclick="closeSocket(); mostrarcasilla();" >Abandonar partida</button>
+	            <button type="button" onclick="closeSocket(); mostrarcasilla();location.reload();" >Abandonar partida</button>
 	        </div>
 	        <!-- Server responses get written here -->
 	        
@@ -61,8 +60,11 @@
         </div>
         <div id="menu" class="container-center">
         	<button id="conectar" type="button" onclick="openSocket(); mostrarmenu();" >Jugar!</button>
-        	<div id="menu" style="display:none;"></div>
-        	<div id="confirmar" style="display:none;">Espere la confirmacion...</div>
+        	<div id="confirmar" style="display:none;" class="container-center">
+        	</div>
+        	<div id="menu" style="display:none;" class="container-center">
+        	</div>
+        	
         </div>
         <script type="text/javascript" src="script.js"></script>
     </body>

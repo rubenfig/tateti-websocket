@@ -22,6 +22,8 @@ function mostrarmenu(){
     
 
         document.getElementById("menu").style.display="inline";
+        document.getElementById("menu").innerHTML += "<h2 >Elija contrincante:</h2>"
+
         document.getElementById("conectar").style.display="none";
     
 }
@@ -29,6 +31,8 @@ function mostrarmenu(){
 function mostrarconfirmacion(){
     
         document.getElementById("confirmar").style.display="inline";
+        document.getElementById("confirmar").innerHTML += "<h2 >Espere confirmacion...</h2>"
+        document.getElementById("confirmar").innerHTML += "<button type='button' onclick='closeSocket(); mostrarcasilla();location.reload();' >Salir</button>"
         document.getElementById("menu").style.display="none";
    
 }
@@ -92,20 +96,23 @@ function openSocket(){
 	
 		    }
         }else if (array[0]==="abierto"){
-        	menu.innerHTML += "<li id=\"jugador" + array[1] + "\" onClick=\"jugar(" + array[1] + ")\";>Jugador:" + array[1] + "</li>"
+        	menu.innerHTML += "<br><br><button type='button' id='jugador" + array[1] + "' onClick='jugar(\"" + array[1] + "\")';>Jugador:" + array[1] + "</button>"
         }else if (array[0]==="cerrado"){
         	document.getElementById("jugador"+array[1]).remove();
         	if (contrario==array[1]){
         		alert("El jugador abandono la partida!");
     			finJuego = true;
         	}
+        }else if (array[0]==="jugando"){
+        	document.getElementById("jugador"+array[1]).remove();
+        	
         }else if (array[0]==="jugar"){
-        	menu.innerHTML += "<li id=\"confirmar" + array[1] + "\" onClick=\"confirmar(" + array[1] + ")\";>Jugador " + array[1] + " quiere jugar. Click aqui para aceptar</li>"
+        	menu.innerHTML += "<br><br><button type='button' id='confirmar" + array[1] + "' onClick='confirmar(\"" + array[1] + "\")';>Jugador " + array[1] + " quiere jugar. Click aqui para aceptar</button>"
         }else if (array[0]==="confirmado"){
         	mostrarcasilla();
         	tu_turno = true;
         	contrario=array[1];
-        	webSocket.send("cerrado:"+array[1]);
+        	
 
         }
  		
@@ -129,12 +136,13 @@ function closeSocket(){
 }
 
 function writeResponse(text){
-    menu.innerHTML += "<br/>" + text;
+    console.log(text);
 }
 
 function jugar(jugador){
 	send("jugar_servidor:"+jugador);
 	mostrarconfirmacion();
+	webSocket.send("jugando:"+array[1]);
 }
 function confirmar(jugador){
 	send("confirmado_servidor:"+jugador);
@@ -142,7 +150,7 @@ function confirmar(jugador){
 	mostrarcasilla();
 	tu_turno=false;
 	contrario=jugador;
-	webSocket.send("cerrado:"+jugador);
+	webSocket.send("jugando:"+jugador);
 
 }
 
@@ -187,74 +195,58 @@ function comprobarGanador() {
 	if (marcado[0]==marcado[1] && marcado[1]==marcado[2] && marcado[0]!==0){
 		if (marcado[0]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[0]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[0]==marcado[3] && marcado[3]==marcado[6] && marcado[0]!==0){
 		if (marcado[0]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[0]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[0]==marcado[4] && marcado[4]==marcado[8] && marcado[0]!==0){
 		if (marcado[0]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[0]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[2]==marcado[5] && marcado[5]==marcado[8] && marcado[2]!==0){
 		if (marcado[2]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[2]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[6]==marcado[7] && marcado[7]==marcado[8] && marcado[6]!==0){
 		if (marcado[6]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[0]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[1]==marcado[4] && marcado[4]==marcado[7] && marcado[1]!==0){
 		if (marcado[1]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[1]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	} else if (marcado[3]==marcado[4] && marcado[4]==marcado[5] && marcado[3]!==0){
 		if (marcado[3]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[3]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 
 	} else if (marcado[2]==marcado[4] && marcado[4]==marcado[6] && marcado[2]!==0){
 		if (marcado[2]==1){
 			alert("El ganador es el Player: 1");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		} else if (marcado[2]==2){
 			alert("El ganador es el Player: 2");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
 	}else {			
