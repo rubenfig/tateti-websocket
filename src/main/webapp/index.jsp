@@ -62,7 +62,7 @@
         <div id="menu" class="container-center">
         	<button id="conectar" type="button" onclick="openSocket(); mostrarmenu();" >Jugar!</button>
         	<div id="menu" style="display:none;"></div>
-        	<div id="confirmar" style="display:none;"><h3>Espere la confirmacion...</h3></div>
+        	<div id="confirmar" style="display:none;">Espere la confirmacion...</div>
         </div>
         <script type="text/javascript" src="script.js"></script>
     </body>

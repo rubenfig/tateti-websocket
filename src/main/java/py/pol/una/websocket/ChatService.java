@@ -49,23 +49,25 @@ public class ChatService {
 	 @OnMessage
 	 public void broadcastFigure(String mensaje, Session session) throws IOException {
 		 String[] partes = mensaje.split(":");
-		 if (partes[0]=="jugar"){
+		 System.out.println(partes[0] );
+		 if (partes[0].equals("jugar_servidor")){
+			 System.out.println(partes[0] );
 			 for (Session peer : peers) {
-		            if (peer.getId()==partes[1]) {
+		            if (peer.getId().equals(partes[1])) {
 		            	System.out.println("Enviando mensaje a " + peer.getId());
 		                peer.getBasicRemote().sendText("jugar:"+session.getId());
 		            }
 		        }
-		 }else if (partes[0]=="confirmado"){
+		 }else if (partes[0].equals("confirmado_servidor")){
 			 for (Session peer : peers) {
-		            if (peer.getId()==partes[1]) {
+		            if (peer.getId().equals(partes[1])) {
 		            	System.out.println("Enviando mensaje a " + peer.getId());
 		                peer.getBasicRemote().sendText("confirmado:"+session.getId());
 		            }
 		        }
-		 }else if (partes[0]=="jugada"){
+		 }else if (partes[0].equals("jugada_servidor")){
 			 for (Session peer : peers) {
-		            if (peer.getId()==partes[2]) {
+		            if (peer.getId().equals(partes[2])) {
 		            	System.out.println("Enviando mensaje a " + peer.getId());
 		                peer.getBasicRemote().sendText("jugada:"+partes[1]+":"+session.getId());
 		            }

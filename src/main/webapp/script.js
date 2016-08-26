@@ -104,7 +104,8 @@ function openSocket(){
         }else if (array[0]==="confirmado"){
         	mostrarcasilla();
         	tu_turno = true;
-        	contrario=array[1]
+        	contrario=array[1];
+        	webSocket.send("cerrado:"+array[1]);
 
         }
  		
@@ -132,15 +133,16 @@ function writeResponse(text){
 }
 
 function jugar(jugador){
-	send("jugar:"+jugador);
+	send("jugar_servidor:"+jugador);
 	mostrarconfirmacion();
 }
 function confirmar(jugador){
-	send("confirmado:"+jugador);
+	send("confirmado_servidor:"+jugador);
 	document.getElementById("confirmar"+jugador).remove();
 	mostrarcasilla();
 	tu_turno=false;
-	contrario=jugador
+	contrario=jugador;
+	webSocket.send("cerrado:"+jugador);
 
 }
 
@@ -154,7 +156,7 @@ function myFunction(valor) {
 	    	jugador=2;
 	    	document.getElementById("turno").innerHTML = jugador;
 	    	marcado[i] = 1;
-	    	webSocket.send("jugada:"+i+":"+contrario);
+	    	webSocket.send("jugada_servidor:"+i+":"+contrario);
 	    	comprobarGanador();
 	    	tu_turno=false;
 	    }
@@ -163,7 +165,7 @@ function myFunction(valor) {
 	  		jugador = 1;
 	  		document.getElementById("turno").innerHTML = jugador;
 	  		marcado[i] = 2;
-	  		webSocket.send("jugada:"+i+":"+contrario);
+	  		webSocket.send("jugada_servidor:"+i+":"+contrario);
 	  		comprobarGanador();
 	    	tu_turno=false;
 	  	}
