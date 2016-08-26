@@ -64,7 +64,7 @@ function openSocket(){
 	
 		    }
         }else if (array[0]==="abierto"){
-        	
+        	menu.innerHTML += "<br/>" + text;
         }
  		
     };
