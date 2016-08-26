@@ -2,21 +2,49 @@ var jugador = 1;
 var marcado = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 var finJuego = false;  
 var count = 0;
-
+var tu_turno;
+var contrario;
 var webSocket;
 var menu = document.getElementById("menu");
-var tu_turno = true;
 
 function mostrarcasilla(){
     
     if (document.getElementById("juego").style.display=="none"){
         document.getElementById("juego").style.display="inline";
-        document.getElementById("menu").style.display="none";
+        document.getElementById("confirmar").style.display="none";
     } else {
         document.getElementById("juego").style.display="none";
-        document.getElementById("menu").style.display="inline";
+        document.getElementById("conectar").style.display="inline";
     }
 }
+
+function mostrarmenu(){
+    
+
+        document.getElementById("menu").style.display="inline";
+        document.getElementById("conectar").style.display="none";
+    
+}
+
+function mostrarconfirmacion(){
+    
+        document.getElementById("confirmar").style.display="inline";
+        document.getElementById("menu").style.display="none";
+   
+}
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
+}
+
+
 
 //PARTE WEBSOCKET
 function openSocket(){
@@ -64,7 +92,20 @@ function openSocket(){
 	
 		    }
         }else if (array[0]==="abierto"){
-        	menu.innerHTML += "<br/>" + text;
+        	menu.innerHTML += "<li id=\"jugador" + array[1] + "\" onClick=\"jugar(" + array[1] + ")\";>Jugador:" + array[1] + "</li>"
+        }else if (array[0]==="cerrado"){
+        	document.getElementById("jugador"+array[1]).remove();
+        	if (contrario==array[1]){
+        		alert("El jugador abandono la partida!");
+    			finJuego = true;
+        	}
+        }else if (array[0]==="jugar"){
+        	menu.innerHTML += "<li id=\"confirmar" + array[1] + "\" onClick=\"confirmar(" + array[1] + ")\";>Jugador " + array[1] + " quiere jugar. Click aqui para aceptar</li>"
+        }else if (array[0]==="confirmado"){
+        	mostrarcasilla();
+        	tu_turno = true;
+        	contrario=array[1]
+
         }
  		
     };
@@ -90,6 +131,19 @@ function writeResponse(text){
     menu.innerHTML += "<br/>" + text;
 }
 
+function jugar(jugador){
+	send("jugar:"+jugador);
+	mostrarconfirmacion();
+}
+function confirmar(jugador){
+	send("confirmado:"+jugador);
+	document.getElementById("confirmar"+jugador).remove();
+	mostrarcasilla();
+	tu_turno=false;
+	contrario=jugador
+
+}
+
 function myFunction(valor) {
     var elements = document.getElementsByClassName("letter");
     var j;
@@ -100,7 +154,7 @@ function myFunction(valor) {
 	    	jugador=2;
 	    	document.getElementById("turno").innerHTML = jugador;
 	    	marcado[i] = 1;
-	    	webSocket.send("jugada:"+i);
+	    	webSocket.send("jugada:"+i+":"+contrario);
 	    	comprobarGanador();
 	    	tu_turno=false;
 	    }
@@ -109,7 +163,7 @@ function myFunction(valor) {
 	  		jugador = 1;
 	  		document.getElementById("turno").innerHTML = jugador;
 	  		marcado[i] = 2;
-	  		webSocket.send("jugada:"+i);
+	  		webSocket.send("jugada:"+i+":"+contrario);
 	  		comprobarGanador();
 	    	tu_turno=false;
 	  	}
@@ -191,7 +245,6 @@ function comprobarGanador() {
 			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';
 		}
 		finJuego = true;
-		tu_turno=true;
 	}else{
 			
 		for (var j=0;j<9; j++)
@@ -204,7 +257,6 @@ function comprobarGanador() {
 		if (count==9)
 		{
 			alert("Empate!");
-			document.getElementById("again").innerHTML = 'Click aqui para jugar de nuevo!';	
 			finJuego = true;
 		}
 		count=0;

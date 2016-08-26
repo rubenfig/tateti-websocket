@@ -22,26 +22,64 @@ public class ChatService {
         try {
         	peers.add(session);
             session.getBasicRemote().sendText("Connection Established");
+            for (Session peer : peers) {
+                if (!peer.equals(session)) {
+                	System.out.println("Enviando abierto:"+session.getId()+" a " + peer.getId());
+                    peer.getBasicRemote().sendText("abierto:"+session.getId());
+                    session.getBasicRemote().sendText("abierto:"+peer.getId());
+                }
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 	
 	@OnClose
-    public void onClose (Session peer) {
+    public void onClose (Session peer) throws IOException {
 		System.out.println(peer.getId() + " has closed a connection"); 
+		for (Session p : peers) {
+            if (!p.equals(peer)) {
+            	System.out.println("Enviando mensaje a " + p.getId());
+                p.getBasicRemote().sendText("cerrado:"+peer.getId());
+            }
+        }
         peers.remove(peer);
     }
 	
 	 @OnMessage
 	 public void broadcastFigure(String mensaje, Session session) throws IOException {
-        System.out.println("broadcast message: " + mensaje + ". Peers #: " + peers.size());
-        
-        for (Session peer : peers) {
-            if (!peer.equals(session)) {
-            	System.out.println("Enviando mensaje a " + peer.getId());
-                peer.getBasicRemote().sendText(mensaje);
-            }
-        }
+		 String[] partes = mensaje.split(":");
+		 if (partes[0]=="jugar"){
+			 for (Session peer : peers) {
+		            if (peer.getId()==partes[1]) {
+		            	System.out.println("Enviando mensaje a " + peer.getId());
+		                peer.getBasicRemote().sendText("jugar:"+session.getId());
+		            }
+		        }
+		 }else if (partes[0]=="confirmado"){
+			 for (Session peer : peers) {
+		            if (peer.getId()==partes[1]) {
+		            	System.out.println("Enviando mensaje a " + peer.getId());
+		                peer.getBasicRemote().sendText("confirmado:"+session.getId());
+		            }
+		        }
+		 }else if (partes[0]=="jugada"){
+			 for (Session peer : peers) {
+		            if (peer.getId()==partes[2]) {
+		            	System.out.println("Enviando mensaje a " + peer.getId());
+		                peer.getBasicRemote().sendText("jugada:"+partes[1]+":"+session.getId());
+		            }
+		        }
+		 }else {
+			 
+			 System.out.println("broadcast message: " + mensaje + ". Peers #: " + peers.size());
+	        
+	        for (Session peer : peers) {
+	            if (!peer.equals(session)) {
+	            	System.out.println("Enviando mensaje a " + peer.getId());
+	                peer.getBasicRemote().sendText(mensaje);
+	            }
+	        }
+		 }
     }
 }
