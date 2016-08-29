@@ -6,6 +6,7 @@ var tu_turno;
 var contrario;
 var webSocket;
 var menu = document.getElementById("menu");
+var iam;
 
 function mostrarcasilla(){
     
@@ -49,6 +50,15 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 }
 
 
+function miNombre(ele){
+	var eR = /^[a-zA-Z]*$/;
+	if(event.keyCode == 13 && eR.test(ele.value)==true) {
+		iam = ele.value;
+		iam = "Bienvenido: ".concat(iam);
+		document.getElementById("divName").innerHTML = iam;
+		document.getElementById("conectar1").innerHTML = "<button id='conectar' type='button' onclick='openSocket(); mostrarmenu();' >Jugar!</button>";
+	}
+}
 
 //PARTE WEBSOCKET
 function openSocket(){
@@ -111,6 +121,7 @@ function openSocket(){
         	
         }else if (array[0]==="jugar"){
         	menu.innerHTML += "<br><br><button type='button' id='confirmar" + array[1] + "' onClick='confirmar(\"" + array[1] + "\")';>Jugador " + array[1] + " quiere jugar. Click aqui para aceptar</button>"
+        	
         }else if (array[0]==="confirmado"){
         	mostrarcasilla();
         	tu_turno = true;
@@ -154,6 +165,7 @@ function confirmar(jugador){
 	tu_turno=false;
 	contrario=jugador;
 	webSocket.send("jugando:"+jugador);
+	menu.innerHTML = "";
 
 }
 

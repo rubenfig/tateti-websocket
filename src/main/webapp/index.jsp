@@ -8,7 +8,13 @@
     <body background= "ric.jpg">
        <div class="container-center">
 				<h1>TA-TE-TI GAME!</h1>
-			</div>
+				<br>
+				<div id="divName">
+						<h3> Ingrese su nombre:</h3>
+						<input type="text" id="myName" placeholder="Solo letras, sin espacios." onkeydown="miNombre(this)">
+				</div>
+				<br><br>
+		</div>
        
        <div id="juego" style="display:none;">
 	        
@@ -59,7 +65,7 @@
 	        
         </div>
         <div class="container-center">
-        	<button id="conectar" type="button" onclick="openSocket(); mostrarmenu();" >Jugar!</button>
+        	<div id="conectar1"></div>
         	<div id="confirmar" style="display:none;" class="container-center">
         	</div>
         	<div id="menu" style="display:none;" class="container-center">
