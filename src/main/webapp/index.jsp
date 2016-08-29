@@ -58,7 +58,7 @@
 	        
 	        
         </div>
-        <div id="menu" class="container-center">
+        <div class="container-center">
         	<button id="conectar" type="button" onclick="openSocket(); mostrarmenu();" >Jugar!</button>
         	<div id="confirmar" style="display:none;" class="container-center">
         	</div>

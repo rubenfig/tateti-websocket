@@ -98,8 +98,11 @@ function openSocket(){
         }else if (array[0]==="abierto"){
         	menu.innerHTML += "<br><br><button type='button' id='jugador" + array[1] + "' onClick='jugar(\"" + array[1] + "\")';>Jugador:" + array[1] + "</button>"
         }else if (array[0]==="cerrado"){
-        	document.getElementById("jugador"+array[1]).remove();
-        	if (contrario==array[1]){
+        	if(document.getElementById("jugador"+array[1])){
+        	document.getElementById("jugador"+array[1]).remove();}
+        	else if (document.getElementById("confirmar"+array[1])){
+        	document.getElementById("confirmar"+array[1]).remove();}
+        	else if (contrario==array[1]){
         		alert("El jugador abandono la partida!");
     			finJuego = true;
         	}
@@ -142,7 +145,7 @@ function writeResponse(text){
 function jugar(jugador){
 	send("jugar_servidor:"+jugador);
 	mostrarconfirmacion();
-	webSocket.send("jugando:"+array[1]);
+	webSocket.send("jugando:"+jugador);
 }
 function confirmar(jugador){
 	send("confirmado_servidor:"+jugador);
