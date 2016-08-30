@@ -51,7 +51,7 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 
 
 function miNombre(ele){
-	var eR = /^[a-zA-Z]*$/;
+	var eR = /^[a-zA-Z0-9]+$/;
 	if(event.keyCode == 13 && eR.test(ele.value)==true) {
 		iam = ele.value;
 		iam = "Bienvenido: ".concat(iam);
